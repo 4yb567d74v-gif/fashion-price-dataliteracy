@@ -1,0 +1,8 @@
+﻿year,monthly_avg_expenditure,unit,table_id,org_id,item,category_code,household_type,period_type,source_url
+2019,2456678.173,원,DT_1L9U101,101,소비지출,F,전체가구,연간(Y),https://kosis.kr/openapi/Param/statisticsParameterData.do
+2020,2400122.866,원,DT_1L9U101,101,소비지출,F,전체가구,연간(Y),https://kosis.kr/openapi/Param/statisticsParameterData.do
+2021,2494854.095,원,DT_1L9U101,101,소비지출,F,전체가구,연간(Y),https://kosis.kr/openapi/Param/statisticsParameterData.do
+2022,2640003.001,원,DT_1L9U101,101,소비지출,F,전체가구,연간(Y),https://kosis.kr/openapi/Param/statisticsParameterData.do
+2023,2792034.642,원,DT_1L9U101,101,소비지출,F,전체가구,연간(Y),https://kosis.kr/openapi/Param/statisticsParameterData.do
+2024,2890478.297,원,DT_1L9U101,101,소비지출,F,전체가구,연간(Y),https://kosis.kr/openapi/Param/statisticsParameterData.do
+2025,2939091.321,원,DT_1L9U101,101,소비지출,F,전체가구,연간(Y),https://kosis.kr/openapi/Param/statisticsParameterData.do

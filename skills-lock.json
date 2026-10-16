@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "skills": {
+    "bunjang-search": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "bunjang-search/SKILL.md",
+      "computedHash": "d54adb8fd1a802f7b156fb922f49ce99139c34f00cf3b46baa3806ade80b72df"
+    },
+    "consumer-price-safety-search": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "consumer-price-safety-search/SKILL.md",
+      "computedHash": "fb254e202525d879579b9f46f5d5ed23955c2790d442a96417cc707bb2b45a0f"
+    },
+    "coupang-product-search": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "coupang-product-search/SKILL.md",
+      "computedHash": "3a5656dfdda5fe4a91867c29b6b88618a8f6efc3fda6f51fb9abd527b391ee6f"
+    },
+    "daangn-cars-search": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "daangn-cars-search/SKILL.md",
+      "computedHash": "a21d87706703e19502de17f96e716d7408ef2af684852ad906350325749e6bae"
+    },
+    "daangn-used-goods-search": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "daangn-used-goods-search/SKILL.md",
+      "computedHash": "da2ab3f9a69de6e2b98bd20ff68609562e60f15c6cc977f23ffe0dcd726787de"
+    },
+    "daiso-product-search": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "daiso-product-search/SKILL.md",
+      "computedHash": "d655c5ac11f90d6ac6faef7797a39ff51b25efdb09d9859bc1273575da06d68c"
+    },
+    "danawa-price-search": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "danawa-price-search/SKILL.md",
+      "computedHash": "ab1adb65512bb8c47143627bd668ff95336789d0b2a7666bf03899236ed2cc38"
+    },
+    "kosis-stats": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "kosis-stats/SKILL.md",
+      "computedHash": "d9a82d87298fde3903b8db6fb28a34de459a9d909244ce220d00e97fb6a0fa40"
+    },
+    "market-kurly-search": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "market-kurly-search/SKILL.md",
+      "computedHash": "c3ea9dbd05c93890bc1ef5eec144c7273552373c9ded94f512b5cd59d4f6451a"
+    },
+    "naver-shopping-search": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "naver-shopping-search/SKILL.md",
+      "computedHash": "4b2dde9c0e5db61178f62b6ae3941fb3e8fe208151108928eaff559fe1ac8aa0"
+    },
+    "ohou-today-deal": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "ohou-today-deal/SKILL.md",
+      "computedHash": "672dada576d96f410a381cae8986b6471ce25ee847d2d06ff949c4b9fdc984a2"
+    },
+    "olive-young-search": {
+      "source": "NomaDamas/k-skill",
+      "sourceType": "github",
+      "skillPath": "olive-young-search/SKILL.md",
+      "computedHash": "af887abff64a700f8666c78f87b289966c96ae95ee213edb7c83f19f4d68c44e"
+    }
+  }
+}

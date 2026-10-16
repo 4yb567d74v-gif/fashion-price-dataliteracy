@@ -1,0 +1,12 @@
+# secrets — never commit
+.env
+.env.*
+*.env
+!*.env.example
+secrets.env
+
+# OS / editor cruft
+.DS_Store
+
+# local node scratch (not part of the published site)
+node_modules/

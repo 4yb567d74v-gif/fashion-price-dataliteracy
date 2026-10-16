@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>의류·신발 물가와 가계 소비 분석</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- 01. 표지 -->
+  <section class="slide has-photo" data-slide="cover">
+    <div class="photo-slot slot-cover"><div class="fabric-pattern"></div></div>
+    <div class="photo-overlay"></div>
+    <span class="photo-hint">이미지 플레이스홀더 · assets/img/cover.jpg</span>
+    <div class="slide-inner">
+      <p class="kicker">데이터리터러시 · 의류학과 관점 데이터 분석</p>
+      <h1 class="title">의류·신발 물가와<br>가계 소비 변화</h1>
+      <h2 class="sub-title">KOSIS 10년 통계와 최신 뉴스로 보는 패션 소비 트렌드</h2>
+      <p class="lede">전체 물가 대비 의류·신발 물가 상승률, 가계 소비지출 중 의류 비중 변화, 코로나19 전후 패턴을 데이터로 확인하고 패스트패션·소비 트렌드 관점에서 해석합니다.</p>
+      <p class="footnote">2026-10-16 · 출처: KOSIS(국가통계포털) Open API, 공개 뉴스 4건</p>
+    </div>
+  </section>
+
+  <!-- 02. 핵심 요약 -->
+  <section class="slide" data-slide="summary">
+    <div class="slide-inner">
+      <p class="kicker">한눈에 보기</p>
+      <h1 class="title">10년의 숫자가 말하는 것</h1>
+      <p class="lede">의류·신발 물가는 장기적으로는 전체 물가보다 덜 올랐지만, 특정 시기에 급등했고 — 가계가 실제로 쓰는 돈의 비중은 꾸준히 줄고 있습니다.</p>
+
+      <div class="stat-grid">
+        <div class="stat-card accent-blue">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 4l-4 3 2 3-2 3 4 9h8l4-9-2-3 2-3-4-3-4 2-4-2z"/>
+          </svg>
+          <div class="stat-value" data-to="20.1" data-decimals="1" data-prefix="+" data-suffix="%">0%</div>
+          <div class="stat-label">2016→2025 의류·신발 물가 누적 상승률<br><span style="color:var(--ink-muted)">(전체 물가는 +21.7%)</span></div>
+        </div>
+        <div class="stat-card accent-orange">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 3a9 9 0 0 1 9 9h-9z"/>
+          </svg>
+          <div class="stat-value" data-to="4.8" data-decimals="1" data-suffix="%">0%</div>
+          <div class="stat-label">2025년 가구 소비지출 중 의류·신발 비중<br><span style="color:var(--ink-muted)">(2019년 5.6% → 2025년 4.8%)</span></div>
+        </div>
+        <div class="stat-card accent-orange">
+          <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 17l5-6 4 3 5-8 4 5"/>
+          </svg>
+          <div class="stat-value" data-to="6.7" data-decimals="1" data-prefix="+" data-suffix="%">0%</div>
+          <div class="stat-label">2023년 의류·신발 물가 전년 대비 상승률<br><span style="color:var(--ink-muted)">10년 중 최대 상승폭</span></div>
+        </div>
+      </div>
+      <p class="footnote">출처: KOSIS DT_1J22001, DT_1L9U101 <span class="ref">[1][2]</span></p>
+    </div>
+  </section>
+
+  <!-- 03. ① 물가 수준 비교 -->
+  <section class="slide" data-slide="cpi-level">
+    <div class="slide-inner">
+      <p class="kicker">① 전체 물가 대비 의류·신발 물가</p>
+      <h1 class="title">물가 수준, 10년의 궤적</h1>
+      <div class="chart-layout">
+        <div class="chart-figure">
+          <div class="legend">
+            <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>전체 소비자물가지수</span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span>의류·신발 소비자물가지수</span>
+          </div>
+          <div id="cpi-level-chart"></div>
+          <p class="footnote">2020=100, 연간 · KOSIS DT_1J22001 <span class="ref">[1]</span></p>
+        </div>
+        <div class="side-stack">
+          <div class="callout-card">
+            10년 누적으로는 의류·신발 물가(<b>+20.1%</b>)가 전체 물가(<b>+21.7%</b>)보다 소폭 덜 올랐습니다.
+          </div>
+          <div class="callout-card">
+            하지만 <b>2022~2023년에는 의류·신발 물가가 전체 물가를 추월</b>했고, 2023년에는 전년 대비 +6.7%로 10년 중 가장 큰 폭으로 뛰었습니다.
+          </div>
+          <div class="callout-card">
+            의류·신발은 구조적 저물가 품목이 아니라, 원자재·운임·환율 충격에 민감하게 반응하는 '스파이크형' 품목군입니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04. ① 상승률 비교 -->
+  <section class="slide" data-slide="cpi-yoy">
+    <div class="slide-inner">
+      <p class="kicker">① 전체 물가 대비 의류·신발 물가</p>
+      <h1 class="title">전년 대비 상승률 비교</h1>
+      <div class="chart-layout">
+        <div class="chart-figure">
+          <div class="legend">
+            <span class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span>전체 물가 상승률</span>
+            <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span>의류·신발 물가 상승률</span>
+          </div>
+          <div id="cpi-yoy-chart"></div>
+          <p class="footnote">전년 대비, 연간 · KOSIS DT_1J22001 <span class="ref">[1]</span></p>
+        </div>
+        <div class="side-stack">
+          <div class="callout-card">
+            2023년 의류·신발 물가는 <b>+6.7%</b> 올라 전체 물가 상승률(+3.6%)의 약 두 배였습니다.
+          </div>
+          <div class="callout-card">
+            2024~2025년에는 함께 둔화됐지만, <b>2026년 들어 의류·신발 물가가 다시 반등</b>하는 조짐이 최근 보도에서 확인됩니다. <span class="ref">[3]</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05. ② 가구 소비지출 중 의류 비중 -->
+  <section class="slide" data-slide="share">
+    <div class="slide-inner">
+      <p class="kicker">② 가구 소비지출 중 의류 비중</p>
+      <h1 class="title">지갑에서 의류가 차지하는 자리</h1>
+      <div class="chart-layout">
+        <div class="chart-figure">
+          <div class="legend">
+            <span class="legend-item"><span class="legend-dot" style="background:var(--orange)"></span>소비지출 대비 의류·신발 비중</span>
+          </div>
+          <div id="share-chart"></div>
+          <p class="footnote">전국 1인이상 가구, 연간 · KOSIS DT_1L9U101 <span class="ref">[2]</span></p>
+        </div>
+        <div class="side-stack">
+          <div class="stat-card accent-orange" style="padding:18px 20px;">
+            <div class="stat-value" data-to="4.8" data-decimals="1" data-suffix="%">5.6%</div>
+            <div class="stat-label">2025년 비중 (2019년 5.6%에서 하락)</div>
+          </div>
+          <div class="callout-card">
+            2019~2025년 가구 소비지출은 명목 <b>+19.6%</b> 늘었지만, 의류·신발 지출은 <b>+2.1%</b>에 그쳤습니다. 물가가 20%p 넘게 오른 걸 감안하면, <b>실질 구매량은 뚜렷하게 줄었다</b>는 뜻입니다.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06. ③ 코로나 전후 변화 -->
+  <section class="slide" data-slide="covid">
+    <div class="slide-inner">
+      <p class="kicker">③ 코로나19 전후 변화</p>
+      <h1 class="title">세 개의 국면</h1>
+      <p class="lede">수요가 먼저 꺾이고, 이후 공급이 비싸졌습니다 — 코로나는 지출 비중의 하향 추세를 가속한 계기로 보입니다.</p>
+      <div class="timeline-grid">
+        <div class="timeline-card pre">
+          <span class="timeline-tag">코로나 이전 · 2019</span>
+          <h3>완만한 상승</h3>
+          <p>의류·신발 CPI는 연 1%대로 완만히 올랐고, 가계지출 비중은 5.6%였습니다.</p>
+          <div class="spark-wrap" id="spark-pre"></div>
+        </div>
+        <div class="timeline-card mid">
+          <span class="timeline-tag">코로나 시기 · 2020~2021</span>
+          <h3>수요가 먼저 꺾였다</h3>
+          <p>가구 의류 지출은 2020년 전년 대비 -14.5% 급감했지만, 물가는 거의 밀리지 않았습니다.</p>
+          <div class="spark-wrap" id="spark-mid"></div>
+        </div>
+        <div class="timeline-card post">
+          <span class="timeline-tag">코로나 이후 · 2022~2025</span>
+          <h3>가격 급등, 비중은 하락</h3>
+          <p>억눌린 수요가 풀리며 물가가 급등(2023년 +6.7%)했지만, 지출 비중은 2022년 5.2%에서 2025년 4.8%로 다시 줄었습니다.</p>
+          <div class="spark-wrap" id="spark-post"></div>
+        </div>
+      </div>
+      <p class="footnote">출처: KOSIS DT_1J22001, DT_1L9U101 <span class="ref">[1][2]</span></p>
+    </div>
+  </section>
+
+  <!-- 07. ④ 뉴스로 보는 원인 (섹션 도입) -->
+  <section class="slide has-photo" data-slide="news">
+    <div class="photo-slot slot-news"></div>
+    <div class="photo-overlay"></div>
+    <span class="photo-hint">이미지 플레이스홀더 · assets/img/news-section.jpg</span>
+    <div class="slide-inner">
+      <p class="kicker">④ 뉴스로 보는 원인</p>
+      <h1 class="title">가격 저항, 그리고 패스트패션의 피로</h1>
+      <p class="lede">최근 보도 4건을 데이터 흐름과 겹쳐보면, "싸게 많이"에서 "따져서 신중하게"로 이동하는 소비 전환이 보입니다.</p>
+      <div class="news-grid">
+        <div class="news-card">
+          <span class="news-date">2026-09-05</span><span class="news-source">한국섬유신문</span>
+          <div class="news-title">소비자물가 다시 3%대…패션 소비 '가격 저항' 커진다</div>
+          <div class="news-summary">8월 의류·신발 CPI가 전년比 2.8% 상승. 2022~2025년 둔화되던 상승률이 2026년 재상승 전환. <span class="ref">[3]</span></div>
+        </div>
+        <div class="news-card">
+          <span class="news-date">2026-07-16</span><span class="news-source">국제섬유신문</span>
+          <div class="news-title">올 의류 값 5%[이상] 인상 '후폭풍'</div>
+          <div class="news-summary">미국 관세發 수입비용 증가로 2026년 미국 내 의류가격 5%+ 인상 전망, 소싱처 다변화. <span class="ref">[4]</span></div>
+        </div>
+        <div class="news-card">
+          <span class="news-date">2026-01-09</span><span class="news-source">뉴스메이커</span>
+          <div class="news-title">경기 변화에 민감하게 반응하는 패션 산업</div>
+          <div class="news-summary">2025년 경기둔화·이상기후로 의류 소비 위축, 주요 패션기업 영업이익 큰 폭 감소. <span class="ref">[5]</span></div>
+        </div>
+        <div class="news-card">
+          <span class="news-date">2025-12-18</span><span class="news-source">삼성패션연구소</span>
+          <div class="news-title">2025년 패션산업 10대 이슈 발표</div>
+          <div class="news-summary">2025년 키워드 'BACKFILLED(보완)' — 확장보다 효율화·안정 운영에 주목한 한 해. <span class="ref">[6]</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08. 종합 해석 -->
+  <section class="slide has-photo" data-slide="interpretation">
+    <div class="photo-slot slot-conclusion"></div>
+    <div class="photo-overlay"></div>
+    <span class="photo-hint">이미지 플레이스홀더 · assets/img/conclusion.jpg</span>
+    <div class="slide-inner">
+      <p class="kicker">종합 해석 · 의류학과 관점</p>
+      <h1 class="title">패스트패션에서 신중한 소비로</h1>
+      <div class="flow-row">
+        <span class="flow-pill">저가·대량·빠른 회전</span>
+        <svg class="flow-arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h24M18 1l7 6-7 6"/></svg>
+        <span class="flow-pill">가격 저항 · 수요 둔화</span>
+        <svg class="flow-arrow" viewBox="0 0 28 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h24M18 1l7 6-7 6"/></svg>
+        <span class="flow-pill">가성비·리세일 중심 소비</span>
+      </div>
+      <p class="quote-card">물가(①)는 공급망 충격마다 스파이크를 그리는데, 가계 지출 비중(②)은 오히려 추세적으로 줄고 있습니다. 패스트패션 업계가 가격 인상(관세·원가 압박 <span class="ref">[4]</span>)과 수요 둔화(경기·기후 <span class="ref">[5]</span>)라는 양방향 압박을 동시에 받으면서, 중고·리세일 플랫폼 확산과 '적게 사지만 신중하게 사는' 소비 트렌드가 구조적으로 자리잡고 있습니다. 업계의 '효율화' 선언<span class="ref">[6]</span>은 이런 소비자 변화에 대한 산업의 응답으로 읽을 수 있습니다.</p>
+    </div>
+  </section>
+
+  <!-- 09. 한계 및 유의사항 -->
+  <section class="slide" data-slide="limitations">
+    <div class="slide-inner">
+      <p class="kicker">한계 및 유의사항</p>
+      <h1 class="title">숫자를 읽을 때 주의할 것</h1>
+      <div class="callout-list">
+        <div class="callout-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L2.5 17a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <p><b>가구지출은 명목 금액입니다.</b> 물가 상승분이 포함돼 있어, 실질(수량) 변화를 보려면 실질 가계수지 표(DT_1L9U118)로 교차 검증이 필요합니다.</p>
+        </div>
+        <div class="callout-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L2.5 17a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <p><b>가구지출 시계열은 2019년부터만 존재합니다.</b> 그 이전은 2인이상 가구 기준의 별도 표(DT_1L9N002)라 가구 정의가 달라 단순 연결하지 않았습니다.</p>
+        </div>
+        <div class="callout-row">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L2.5 17a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <p><b>뉴스 표본은 4건입니다.</b> 2025.12~2026.09 보도에 집중돼 있어, 추세의 '최신 스냅숏' 성격이 강하고 대표성에는 한계가 있습니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. 부록: 원자료 -->
+  <section class="slide" data-slide="appendix">
+    <div class="slide-inner">
+      <p class="kicker">부록</p>
+      <h1 class="title">원자료 차트 · 출처</h1>
+      <div class="thumb-grid">
+        <div class="thumb-card">
+          <img src="assets/charts/01_cpi_total_vs_clothing_2016_2025.png" alt="전체 물가 대비 의류·신발 물가 수준 (2020=100)">
+          <div class="thumb-cap">물가 수준 비교 (matplotlib)</div>
+        </div>
+        <div class="thumb-card">
+          <img src="assets/charts/02_cpi_yoy_growth_2017_2025.png" alt="전년 대비 물가 상승률 비교">
+          <div class="thumb-cap">전년比 상승률 비교 (matplotlib)</div>
+        </div>
+        <div class="thumb-card">
+          <img src="assets/charts/03_clothing_share_of_consumption_2019_2025.png" alt="가구 소비지출 중 의류·신발 비중 변화">
+          <div class="thumb-cap">가계지출 비중 변화 (matplotlib)</div>
+        </div>
+      </div>
+      <div class="source-list">
+        <div>[1] KOSIS 지출목적별 소비자물가지수 (DT_1J22001)</div>
+        <div>[2] KOSIS 가구당 월평균 가계수지 (DT_1L9U101)</div>
+        <div>[3] 한국섬유신문, 2026-09-05</div>
+        <div>[4] 국제섬유신문, 2026-07-16</div>
+        <div>[5] 뉴스메이커, 2026-01-09</div>
+        <div>[6] 삼성패션연구소, 2025-12-18</div>
+      </div>
+      <p class="footnote">전체 산출 코드·원자료: <code>analysis/report.md</code>, <code>data/kosis/</code>, <code>data/news/</code></p>
+    </div>
+  </section>
+
+  <!-- 11. 마무리 -->
+  <section class="slide has-photo" data-slide="closing">
+    <div class="photo-slot slot-closing"></div>
+    <div class="photo-overlay"></div>
+    <span class="photo-hint">이미지 플레이스홀더 · assets/img/closing.jpg</span>
+    <div class="slide-inner">
+      <p class="kicker">감사합니다</p>
+      <h1 class="title">데이터는 말한다 —<br>이제는 신중한 소비의 시대</h1>
+      <h2 class="sub-title">의류·신발 물가와 가계 소비 분석</h2>
+      <div class="closing-list">
+        전체 분석 보고서 · analysis/report.md<br>
+        원자료 · data/kosis/, data/news/<br>
+        레퍼런스 전체 목록 · references/sources.md
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div id="lightbox" class="lightbox"><img src="" alt="확대 이미지"></div>
+
+<nav id="nav-bar">
+  <button id="prev-btn" aria-label="이전 슬라이드">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <span id="slide-counter">1 / 11</span>
+  <div class="progress-track"><div class="progress-fill"></div></div>
+  <button id="next-btn" aria-label="다음 슬라이드">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+</nav>
+
+<script src="assets/vendor/anime.min.js"></script>
+<script src="assets/js/charts.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

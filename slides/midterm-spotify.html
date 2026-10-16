@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>럭셔리 디자이너 브랜드는 어떻게 가격을 매기나 — Spotify Edition</title>
+
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.5.1/chart.umd.min.js"></script>
+<script src="assets/vendor/anime.min.js"></script>
+
+<style>
+  :root{
+    --bg:#121212;
+    --surface:#181818;
+    --surface2:#1f1f1f;
+    --card:#212121;
+    --text:#ffffff;
+    --text-soft:#b3b3b3;
+    --text-faint:#7c7c7c;
+    --accent:#1ed760;
+    --accent-ink:#0a0a0a;
+    --line:#2a2a2a;
+    --sans:'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --shadow-heavy: 0 8px 24px rgba(0,0,0,.5);
+    --shadow-medium: 0 8px 8px rgba(0,0,0,.3);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    overflow:hidden;
+    height:100vh;
+    width:100vw;
+  }
+
+  #deck{ position:relative; width:100vw; height:100vh; }
+
+  .slide{ position:absolute; inset:0; display:none; background:var(--bg); }
+  .slide.active{ display:block; }
+
+  .slide-inner{
+    position:relative; height:100%;
+    padding:clamp(28px,5.6vw,88px) clamp(24px,7vw,110px);
+    display:flex; flex-direction:column; justify-content:center;
+  }
+
+  .watermark{
+    position:absolute; top:clamp(10px,2vw,28px); right:clamp(18px,4vw,56px);
+    font-family:var(--sans); font-weight:900; font-size:clamp(70px,11vw,180px); line-height:1;
+    color:transparent; -webkit-text-stroke:1px var(--line);
+    user-select:none; z-index:0; pointer-events:none;
+  }
+
+  .kicker{
+    display:inline-flex; align-items:center; gap:8px;
+    align-self:flex-start; width:fit-content;
+    font-size:clamp(10.5px,1vw,12.5px);
+    letter-spacing:.14em; text-transform:uppercase;
+    color:var(--accent-ink); font-weight:700;
+    margin:0 0 20px;
+    position:relative; z-index:1;
+    background:var(--accent);
+    padding:6px 14px 6px 10px;
+    border-radius:9999px;
+  }
+  .kicker::before{ content:"●"; font-size:8px; }
+
+  h1.title{
+    font-family:var(--sans); font-weight:800; color:var(--text);
+    font-size:clamp(26px,4.2vw,50px); line-height:1.2; margin:0 0 18px;
+    letter-spacing:-.01em; position:relative; z-index:1;
+  }
+
+  .sub-title{ font-family:var(--sans); font-weight:600; font-size:clamp(14px,1.8vw,19px); color:var(--text-soft); margin:0 0 10px; position:relative; z-index:1; }
+  .lede{ font-size:clamp(13px,1.4vw,16px); color:var(--text-soft); line-height:1.6; max-width:680px; margin:0 0 8px; position:relative; z-index:1; }
+
+  /* ===== 표지 & 클로징 ===== */
+  .photo-slide{
+    position:relative; height:100%; min-height:100vh; display:flex; flex-direction:column; color:#fff;
+    background-size:cover; background-position:center;
+  }
+  .photo-slide.slot-cover{
+    background-image:url('assets/midterm-spotify/img/cover.jpg'),
+      linear-gradient(135deg,#121212 0%, #181818 50%, #0a0a0a 100%);
+  }
+  .photo-slide.slot-closing{
+    background-image:url('assets/midterm-spotify/img/closing.jpg'),
+      linear-gradient(135deg,#0a0a0a 0%, #181818 55%, #121212 100%);
+  }
+  .photo-slide::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(10,10,10,.35) 0%, rgba(10,10,10,.5) 45%, rgba(10,10,10,.92) 100%); }
+  .photo-slide .slide-inner{ position:relative; z-index:2; color:#fff; justify-content:flex-end; }
+
+  .byline{ font-size:clamp(12.5px,1.3vw,15px); color:var(--text-soft); margin-top:26px; position:relative; z-index:1; font-weight:500; }
+  .byline strong{ color:#fff; font-weight:700; }
+
+  /* ===== 02. 주제 배경 ===== */
+  .split{ display:grid; grid-template-columns:1.1fr .9fr; height:100%; }
+  .split-text{ padding:clamp(28px,5.6vw,88px) clamp(24px,5vw,80px); display:flex; flex-direction:column; justify-content:center; position:relative; z-index:1; background:var(--bg); }
+  .split-photo{
+    position:relative; background-size:cover; background-position:center;
+    background-image:url('assets/midterm-spotify/img/background-texture.jpg'),
+      linear-gradient(165deg,#181818 0%, #0a0a0a 100%);
+  }
+  .split-photo::after{ content:""; position:absolute; inset:0; background:linear-gradient(0deg, rgba(0,0,0,.4), rgba(0,0,0,.1)); }
+  .pull-quote{
+    font-family:var(--sans); font-size:clamp(18px,2.3vw,27px); font-weight:700; line-height:1.45;
+    color:var(--text); margin:0 0 22px; padding-left:18px; border-left:3px solid var(--accent);
+  }
+
+  .point-list{ list-style:none; margin:8px 0 0; padding:0; max-width:620px; }
+  .point-list li{ position:relative; padding:16px 0 16px 28px; border-bottom:1px solid var(--line); font-size:clamp(13.5px,1.4vw,16px); color:var(--text); line-height:1.55; }
+  .point-list li:last-child{ border-bottom:none; }
+  .point-list li::before{ content:""; position:absolute; left:0; top:24px; width:8px; height:8px; background:var(--accent); border-radius:50%; }
+  .point-list .muted{ color:var(--text-soft); font-size:.82em; display:block; margin-top:4px; }
+
+  /* ===== 03. 연구질문 ===== */
+  .q-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:16px; position:relative; z-index:1; }
+  .q-card{ background:var(--card); border-radius:12px; padding:28px 22px; box-shadow:var(--shadow-medium); opacity:0; transform:translateY(16px); }
+  .q-card .q-num{
+    width:40px; height:40px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+    font-family:var(--sans); font-weight:800; font-size:16px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:18px;
+  }
+  .q-card p{ font-size:clamp(14px,1.5vw,17px); color:var(--text); line-height:1.5; margin:0 0 10px; font-weight:700; }
+  .q-card .q-tag{ display:inline-block; font-size:11.5px; color:var(--text-soft); background:var(--surface2); padding:5px 12px; border-radius:9999px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
+
+  /* ===== 04. 데이터소개 ===== */
+  .platform-cards{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:18px 0 6px; position:relative; z-index:1; }
+  .platform-card{ border-radius:12px; padding:22px 24px; background:var(--card); box-shadow:var(--shadow-medium); }
+  .platform-card .pc-head{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+  .platform-card .pc-icon{ width:30px; height:30px; color:var(--text-soft); flex:none; }
+  .platform-card .pc-name{ font-family:var(--sans); font-weight:700; font-size:16px; color:var(--text); }
+  .platform-card .pc-count{ font-family:var(--sans); font-size:clamp(28px,3vw,38px); font-weight:800; color:var(--accent); margin:6px 0 2px; }
+  .platform-card .pc-sub{ font-size:12.5px; color:var(--text-faint); margin-bottom:10px; }
+  .platform-card .pc-bar{ height:5px; border-radius:9999px; background:var(--surface2); overflow:hidden; margin-bottom:12px; }
+  .platform-card .pc-bar-fill{ height:100%; background:var(--accent); width:0%; border-radius:9999px; }
+  .platform-card .pc-type{ font-size:12px; color:var(--text-soft); line-height:1.5; }
+  .platform-card .pc-type strong{ color:var(--text); }
+
+  .type-note{
+    margin-top:14px; font-size:clamp(12px,1.2vw,13.5px); color:var(--text-soft);
+    padding:12px 16px; background:var(--card); border-left:3px solid var(--accent);
+    border-radius:0 8px 8px 0; position:relative; z-index:1; max-width:860px;
+  }
+  .type-note strong{ color:var(--text); }
+
+  /* ===== 05. 분석 지표 ===== */
+  .metric-layout{ display:grid; grid-template-columns:1fr 1.05fr; gap:28px; align-items:center; margin-top:8px; position:relative; z-index:1; }
+  .metric-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .metric-card{ background:var(--card); border-radius:10px; padding:16px 16px 14px; opacity:0; transform:translateY(14px); border-top:2px solid var(--accent); }
+  .metric-card .mc-icon{ width:22px; height:22px; color:var(--text-soft); margin-bottom:10px; }
+  .metric-card h3{ font-family:var(--sans); font-size:clamp(14px,1.6vw,16.5px); margin:0 0 6px; color:var(--text); font-weight:700; }
+  .metric-card p{ font-size:clamp(11.5px,1.2vw,13px); color:var(--text-soft); margin:0; line-height:1.5; }
+  .metric-chart{ border-radius:12px; overflow:hidden; box-shadow:var(--shadow-heavy); }
+  .metric-chart img{ width:100%; display:block; }
+
+  /* ===== 06. 절차 ===== */
+  .step-flow{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:30px; position:relative; z-index:1; }
+  .step-connector{ position:relative; height:2px; background:var(--line); margin:0 clamp(16px,5vw,56px); top:22px; grid-column:1/-1; }
+  .step-connector-fill{ position:absolute; left:0; top:0; height:100%; width:0%; background:var(--accent); }
+  .step{ padding:0 10px; text-align:left; opacity:0; transform:translateY(14px); }
+  .step .step-no{
+    width:44px; height:44px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; margin-bottom:16px;
+    box-shadow:var(--shadow-medium);
+  }
+  .step .step-icon{ width:20px; height:20px; }
+  .step h4{ font-size:clamp(13px,1.4vw,15.5px); margin:0 0 8px; color:var(--text); font-weight:700; }
+  .step p{ font-size:clamp(11.5px,1.2vw,13px); color:var(--text-soft); margin:0; line-height:1.55; }
+
+  /* ===== 07. 데이터 미리보기 ===== */
+  .preview-layout{ display:grid; grid-template-columns:1.5fr 1fr; gap:26px; margin-top:10px; position:relative; z-index:1; align-items:start; }
+  .chart-wrap{ height:min(50vh,400px); position:relative; background:var(--card); border-radius:12px; padding:16px; box-shadow:var(--shadow-medium); }
+  .stat-callouts{ display:flex; flex-direction:column; gap:12px; }
+  .stat-callout{ border-radius:10px; padding:16px 18px; background:var(--card); opacity:0; transform:translateX(14px); }
+  .stat-callout .sc-brand{ font-size:11.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; font-weight:700; }
+  .stat-callout .sc-delta{ font-family:var(--sans); font-size:clamp(22px,2.6vw,28px); font-weight:800; color:var(--accent); }
+  .stat-callout .sc-note{ font-size:12px; color:var(--text-soft); margin-top:4px; }
+  .chart-caption{ margin-top:12px; font-size:clamp(11px,1.1vw,12.5px); color:var(--text-faint); max-width:900px; position:relative; z-index:1; }
+
+  /* ===== 08. 한계/계획 ===== */
+  .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:32px; margin-top:14px; position:relative; z-index:1; }
+  .two-col .col{ background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:22px 24px; }
+  .two-col .col h3{ font-family:var(--sans); font-size:clamp(14.5px,1.8vw,19px); font-weight:800; margin:0 0 14px; padding-bottom:10px; border-bottom:2px solid rgba(255,255,255,.2); color:#fff; }
+  .two-col .col.next h3{ color:var(--accent); border-bottom-color:var(--accent); }
+  .two-col ul{ margin:0; padding:0; list-style:none; }
+  .two-col li{ font-size:clamp(12.5px,1.3vw,14.5px); color:var(--text-soft); line-height:1.55; margin-bottom:12px; padding-left:16px; position:relative; }
+  .two-col li::before{ content:"—"; position:absolute; left:0; color:var(--text-faint); }
+  .source-footer{ margin-top:24px; padding-top:16px; border-top:1px solid rgba(255,255,255,.15); font-size:clamp(10.5px,1vw,12px); color:var(--text-faint); line-height:1.6; position:relative; z-index:1; }
+
+  /* ===== 공통 ===== */
+  .progress-rail{ position:fixed; top:0; left:0; width:100%; height:3px; background:var(--line); z-index:20; }
+  .progress-fill{ height:100%; width:0%; background:var(--accent); transition:width .45s ease; }
+  .page-count{ position:fixed; bottom:24px; right:clamp(24px,6vw,64px); font-size:11px; letter-spacing:.08em; color:var(--text-faint); font-family:var(--sans); z-index:5; }
+  .page-count strong{ color:var(--text); }
+  .brand-mark{ position:fixed; bottom:24px; left:clamp(24px,6vw,64px); display:flex; align-items:center; gap:7px; font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:.06em; color:var(--text-faint); z-index:5; }
+  .brand-mark .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); }
+
+  @media (max-width:800px){
+    .split{ grid-template-columns:1fr; grid-template-rows:auto auto; }
+    .split-photo{ min-height:180px; }
+    .q-grid{ grid-template-columns:1fr; }
+    .platform-cards{ grid-template-columns:1fr; }
+    .metric-layout{ grid-template-columns:1fr; }
+    .metric-grid{ grid-template-columns:1fr; }
+    .step-flow{ grid-template-columns:1fr; gap:18px; }
+    .step-connector{ display:none; }
+    .preview-layout{ grid-template-columns:1fr; }
+    .two-col{ grid-template-columns:1fr; gap:18px; }
+    body{ overflow-y:auto; }
+    #deck{ height:auto; min-height:100vh; }
+    .slide{ position:relative; height:auto; min-height:100vh; }
+    .page-count, .brand-mark{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-rail"><div class="progress-fill" id="progressFill"></div></div>
+
+<div id="deck">
+
+  <!-- 1. 표지 -->
+  <section class="slide active" data-index="0">
+    <div class="photo-slide slot-cover">
+      <div class="slide-inner">
+        <p class="kicker">데이터리터러시 · 중간과제</p>
+        <h1 class="title">럭셔리 디자이너 브랜드는<br>어떻게 가격을 매기나</h1>
+        <p class="sub-title">SSENSE와 Net-a-Porter로 본 브랜드 포지셔닝</p>
+        <p class="byline"><strong>황수아</strong> · 부산대학교 의류학과 3학년</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 주제 선정 배경 -->
+  <section class="slide" data-index="1">
+    <div class="split">
+      <div class="split-text">
+        <span class="watermark">02</span>
+        <p class="kicker">주제 선정 배경</p>
+        <h1 class="title">가격은 브랜드가<br>말하는 방식이다</h1>
+        <p class="pull-quote">가격표는 소비자를 향한 숫자가 아니라, 브랜드가 자신을 설명하는 언어다.</p>
+        <ul class="point-list">
+          <li>가격과 상품 구성은 소비자의 선택 문제가 아니라, 브랜드가 스스로를 어떻게 위치시키는지 보여주는 <strong>생산자 측 전략</strong>이다</li>
+          <li>"럭셔리 디자이너 브랜드"라는 한 카테고리 안에도 포지셔닝의 결이 제각각 다르다
+            <span class="muted">— 어떤 브랜드는 좁고 높게, 어떤 브랜드는 넓고 다양하게</span>
+          </li>
+          <li>이 구조를 실제 판매 데이터로 확인해보고자 한다</li>
+        </ul>
+      </div>
+      <div class="split-photo"></div>
+    </div>
+  </section>
+
+  <!-- 3. 연구 질문 -->
+  <section class="slide" data-index="2">
+    <div class="slide-inner">
+      <span class="watermark">03</span>
+      <p class="kicker">연구 질문</p>
+      <h1 class="title">세 가지 질문</h1>
+      <div class="q-grid">
+        <div class="q-card">
+          <span class="q-num">01</span>
+          <p>브랜드별 가격대는 어떻게 나뉘나?</p>
+          <span class="q-tag">가격 분포</span>
+        </div>
+        <div class="q-card">
+          <span class="q-num">02</span>
+          <p>브랜드마다 어떤 품목에 집중하나?</p>
+          <span class="q-tag">구성 전략</span>
+        </div>
+        <div class="q-card">
+          <span class="q-num">03</span>
+          <p>같은 브랜드도 플랫폼에 따라 가격대와 구성이 다른가?</p>
+          <span class="q-tag">플랫폼 비교</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 데이터 소개 -->
+  <section class="slide" data-index="3">
+    <div class="slide-inner">
+      <span class="watermark">04</span>
+      <p class="kicker">데이터</p>
+      <h1 class="title">두 개의 럭셔리 플랫폼</h1>
+      <div class="platform-cards">
+        <div class="platform-card">
+          <div class="pc-head">
+            <svg class="pc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg>
+            <span class="pc-name">SSENSE Fashion Dataset</span>
+          </div>
+          <div class="pc-count" data-count-to="19919">0</div>
+          <div class="pc-sub">Kaggle (justinpakzad)</div>
+          <div class="pc-bar"><div class="pc-bar-fill" data-fill-to="46"></div></div>
+          <div class="pc-type">brand, description, price_usd, <strong>type(성별: mens / womens)</strong></div>
+        </div>
+        <div class="platform-card">
+          <div class="pc-head">
+            <svg class="pc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4z"/><path d="M4 11h10v9H4z"/><path d="M16 11h4v9h-4z"/></svg>
+            <span class="pc-name">Net-a-Porter Fashion Dataset</span>
+          </div>
+          <div class="pc-count" data-count-to="23161">0</div>
+          <div class="pc-sub">Kaggle (justinpakzad)</div>
+          <div class="pc-bar"><div class="pc-bar-fill" data-fill-to="54"></div></div>
+          <div class="pc-type">brand, description, price_usd, <strong>type(카테고리: clothing / shoes / bag / accessories)</strong></div>
+        </div>
+      </div>
+      <p class="type-note">⚠ 두 데이터셋의 <strong>type 컬럼은 의미가 다르다</strong> — SSENSE는 성별 구분, Net-a-Porter는 상품 카테고리 구분. 단순 병합 전 반드시 구분해서 다뤄야 한다.</p>
+    </div>
+  </section>
+
+  <!-- 5. 분석 지표 정의 -->
+  <section class="slide" data-index="4">
+    <div class="slide-inner">
+      <span class="watermark">05</span>
+      <p class="kicker">분석 지표</p>
+      <h1 class="title">무엇을, 왜 셀 것인가</h1>
+      <div class="metric-layout">
+        <div class="metric-grid">
+          <div class="metric-card">
+            <svg class="mc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="6" y="5" width="12" height="4" rx="1"/><rect x="3" y="15" width="18" height="4" rx="1"/></svg>
+            <h3>상품 수</h3>
+            <p>브랜드가 각 플랫폼에서 얼마나 다양하게 전개하는지 보여주는 규모 지표</p>
+          </div>
+          <div class="metric-card">
+            <svg class="mc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.4" fill="currentColor" stroke="none"/><path d="M12 4v3M12 17v3M4 12h3M17 12h3"/></svg>
+            <h3>가격 중앙값</h3>
+            <p>초고가 한정판 같은 이상치에 흔들리지 않는, 브랜드의 대표 가격대</p>
+          </div>
+          <div class="metric-card">
+            <svg class="mc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="M3 12l4-4M3 12l4 4M21 12l-4-4M21 12l-4 4"/></svg>
+            <h3>가격 범위 (최소~최대)</h3>
+            <p>브랜드가 커버하는 가격의 폭 — 포지셔닝이 좁은지 넓은지 보는 지표</p>
+          </div>
+          <div class="metric-card">
+            <svg class="mc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9h-9z"/><path d="M12 3a9 9 0 0 1 9 9"/></svg>
+            <h3>품목별 비중</h3>
+            <p>의류·신발·가방·액세서리 중 무엇에 힘을 싣는지 보여주는 구성 전략 지표</p>
+          </div>
+        </div>
+        <div class="metric-chart">
+          <img src="assets/midterm-spotify/charts/price_range_boxplot_dark.png" alt="SSENSE와 Net-a-Porter의 가격 범위 박스플롯 비교">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 분석 방법과 절차 -->
+  <section class="slide" data-index="5">
+    <div class="slide-inner">
+      <span class="watermark">06</span>
+      <p class="kicker">분석 방법</p>
+      <h1 class="title">계획: 4단계로 본다</h1>
+      <div class="step-flow">
+        <div class="step">
+          <div class="step-no"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l7 6-7 6"/><path d="M13 6l7 6-7 6" opacity=".5"/></svg></div>
+          <h4>브랜드명 정리 &amp; 통합</h4>
+          <p>대소문자·공백 차이를 정규화하고, 플랫폼 구분용 source 컬럼을 붙여 두 데이터를 합친다</p>
+        </div>
+        <div class="step">
+          <div class="step-no"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg></div>
+          <h4>브랜드별 집계</h4>
+          <p>브랜드 단위로 상품 수, 가격 중앙값·범위, 품목 비중을 계산한다</p>
+        </div>
+        <div class="step">
+          <div class="step-no"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M7 12h10M10 18h4"/></svg></div>
+          <h4>가격 티어 분류</h4>
+          <p>중앙값 기준 구간을 나눠 브랜드를 가격 티어(entry/mid/high)로 분류한다</p>
+        </div>
+        <div class="step">
+          <div class="step-no"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M7 19v-6M12 19V7M17 19v-9"/></svg></div>
+          <h4>시각화</h4>
+          <p>막대그래프로 브랜드별 중앙값을, 박스플롯으로 가격 분포·이상치를 확인한다</p>
+        </div>
+        <div class="step-connector"><div class="step-connector-fill" id="stepFill"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 데이터 미리보기 -->
+  <section class="slide" data-index="6">
+    <div class="slide-inner">
+      <span class="watermark">07</span>
+      <p class="kicker">데이터 미리보기</p>
+      <h1 class="title">같은 브랜드, 다른 가격</h1>
+      <div class="preview-layout">
+        <div>
+          <div class="chart-wrap"><canvas id="brandChart"></canvas></div>
+          <p class="chart-caption">두 플랫폼에 공통으로 있는 브랜드 중 상품 수가 가장 많은 10개 브랜드의 가격 중앙값(USD) 비교. 본 분석에서 다룰 "같은 브랜드, 플랫폼별 차이"를 미리 보여주는 샘플이며, 전체 가격 티어 분류는 기말까지 진행할 계획이다.</p>
+        </div>
+        <div class="stat-callouts">
+          <div class="stat-callout">
+            <div class="sc-brand">Saint Laurent</div>
+            <div class="sc-delta">+253%</div>
+            <div class="sc-note">SSENSE $450 → Net-a-Porter $1,590 · 가장 큰 격차</div>
+          </div>
+          <div class="stat-callout">
+            <div class="sc-brand">The Row</div>
+            <div class="sc-delta">+7%</div>
+            <div class="sc-note">SSENSE $1,390 → Net-a-Porter $1,490 · 가장 적은 격차</div>
+          </div>
+          <div class="stat-callout">
+            <div class="sc-brand">Nike</div>
+            <div class="sc-delta">±0%</div>
+            <div class="sc-note">두 플랫폼 모두 $110 · 완전히 동일</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. 한계와 기말 계획 -->
+  <section class="slide" data-index="7">
+    <div class="photo-slide slot-closing">
+      <div class="slide-inner">
+        <span class="watermark" style="color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.12);">08</span>
+        <p class="kicker">한계와 다음 단계</p>
+        <h1 class="title">지금의 한계,<br>기말의 확장</h1>
+        <div class="two-col">
+          <div class="col limit">
+            <h3>한계</h3>
+            <ul>
+              <li>특정 시점에 한 번 수집된 1회성 데이터 — 가격 변동(세일·시즌)을 반영하지 못함</li>
+              <li>판매량·조회수 등 수요 데이터가 없어, 가격만으로는 실제 인기도나 판매 전략까지 알 수 없음</li>
+            </ul>
+          </div>
+          <div class="col next">
+            <h3>기말 계획</h3>
+            <ul>
+              <li>description(상품 설명) 텍스트에서 leather, cashmere, wool, cotton, silk, nylon 등 소재 키워드 빈도를 분석</li>
+              <li>소재 구성과 가격대·브랜드 포지셔닝의 관계까지 확장해 분석</li>
+            </ul>
+          </div>
+        </div>
+        <div class="source-footer">
+          데이터 출처: SSENSE Fashion Dataset · Net-a-Porter / Mr Porter Fashion Dataset (Kaggle, justinpakzad) —
+          kaggle.com/datasets/justinpakzad/ssense-fashion-dataset,
+          kaggle.com/datasets/justinpakzad/net-a-portermr-porter-fashion-dataset
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<div class="brand-mark" id="brandMark"><span class="dot"></span>BRAND PRICING</div>
+<div class="page-count" id="pageCount"><strong id="pcNow">01</strong> / 08</div>
+
+<script>
+(function(){
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  let current = 0;
+  let chartInited = false;
+
+  const progressFill = document.getElementById('progressFill');
+  const pcNow = document.getElementById('pcNow');
+
+  function render(){
+    slides.forEach((s,i)=> s.classList.toggle('active', i===current));
+    pcNow.textContent = String(current+1).padStart(2,'0');
+    progressFill.style.width = ((current+1)/total*100) + '%';
+    playEntrance(current);
+  }
+
+  function go(delta){
+    const next = current + delta;
+    if(next < 0 || next >= total) return;
+    current = next;
+    render();
+  }
+
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' '){ go(1); e.preventDefault(); }
+    if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ go(-1); e.preventDefault(); }
+  });
+
+  document.addEventListener('click', (e)=>{
+    const rect = document.body.getBoundingClientRect();
+    const half = rect.width/2;
+    if(e.clientX < half) go(-1); else go(1);
+  });
+
+  const played = new Set();
+
+  function playEntrance(idx){
+    const slide = slides[idx];
+
+    if(idx === 2){
+      const cards = slide.querySelectorAll('.q-card');
+      window.anime({ targets: cards, opacity:[0,1], translateY:[16,0], delay: window.anime.stagger(110), duration:560, easing:'easeOutCubic' });
+    }
+
+    if(idx === 3 && !played.has('counters')){
+      played.add('counters');
+      slide.querySelectorAll('[data-count-to]').forEach((el)=>{
+        const to = parseInt(el.getAttribute('data-count-to'), 10);
+        const obj = { v: 0 };
+        window.anime({ targets: obj, v: to, duration: 1300, easing:'easeOutExpo',
+          update: ()=>{ el.textContent = Math.round(obj.v).toLocaleString(); } });
+      });
+      slide.querySelectorAll('[data-fill-to]').forEach((el)=>{
+        const to = el.getAttribute('data-fill-to');
+        window.anime({ targets: el, width: to+'%', duration:1200, easing:'easeOutCubic', delay:200 });
+      });
+    }
+
+    if(idx === 4){
+      const cards = slide.querySelectorAll('.metric-card');
+      window.anime({ targets: cards, opacity:[0,1], translateY:[14,0], delay: window.anime.stagger(100), duration:520, easing:'easeOutCubic' });
+    }
+
+    if(idx === 5){
+      const steps = slide.querySelectorAll('.step');
+      window.anime({ targets: steps, opacity:[0,1], translateY:[14,0], delay: window.anime.stagger(130), duration:560, easing:'easeOutCubic' });
+      window.anime({ targets: '#stepFill', width:['0%','100%'], duration:1400, easing:'easeInOutCubic', delay:260 });
+    }
+
+    if(idx === 6){
+      const callouts = slide.querySelectorAll('.stat-callout');
+      window.anime({ targets: callouts, opacity:[0,1], translateX:[14,0], delay: window.anime.stagger(120), duration:560, easing:'easeOutCubic' });
+      if(!chartInited){
+        chartInited = true;
+        initChart();
+      }
+    }
+  }
+
+  function initChart(){
+    const ctx = document.getElementById('brandChart');
+    const brands   = ['Gucci','Saint Laurent','Bottega Veneta','The Row','Valentino Garavani','Balenciaga','Isabel Marant','Nike','Burberry','ALAÏA'];
+    const ssense   = [870, 450, 1100, 1390, 890, 585, 569, 110, 960, 1450];
+    const naporter = [1500, 1590, 2400, 1490, 2200, 1550, 935, 110, 1350, 2130];
+
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: brands,
+        datasets: [
+          { label: 'SSENSE', data: ssense, backgroundColor: '#3a3a3a', borderRadius: 3 },
+          { label: 'Net-a-Porter', data: naporter, backgroundColor: '#1ed760', borderRadius: 3 }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 900, easing: 'easeOutQuart' },
+        plugins: {
+          legend: { position: 'top', align: 'end', labels: { color: '#b3b3b3', font: { family: 'Pretendard', size: 12 }, boxWidth: 12, usePointStyle: true, pointStyle: 'circle' } },
+          tooltip: { callbacks: { label: (item)=> `${item.dataset.label}: $${item.parsed.y.toLocaleString()}` } }
+        },
+        scales: {
+          x: { ticks: { color: '#7c7c7c', font: { family: 'Pretendard', size: 11 } }, grid: { display:false } },
+          y: {
+            ticks: { color: '#7c7c7c', font: { family: 'Pretendard', size: 11 }, callback: (v)=> '$'+v.toLocaleString() },
+            grid: { color: '#2a2a2a' },
+            title: { display:true, text:'가격 중앙값 (USD)', color:'#b3b3b3', font:{ family:'Pretendard', size:12 } }
+          }
+        }
+      }
+    });
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>
